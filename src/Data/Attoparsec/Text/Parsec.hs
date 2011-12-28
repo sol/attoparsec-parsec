@@ -68,7 +68,7 @@ module Data.Attoparsec.Text.Parsec (
 
 -- * State observation and manipulation functions
 , endOfInput
--- , I.atEnd
+, atEnd
 ) where
 
 import           Prelude hiding (takeWhile)
@@ -95,12 +95,9 @@ try = Parsec.try
 char :: Char -> Parser Char
 char = Parsec.char
 
-endOfInput :: Parser ()
-endOfInput = Parsec.eof
 
 endOfLine :: Parser ()
 endOfLine = Parsec.option '\r' (char '\r') >> char '\n' >> return ()
-
 
 takeWhile :: (Char -> Bool) -> Parser Text
 takeWhile p = Text.pack <$> many (satisfy p)
@@ -119,3 +116,12 @@ anyChar = Parsec.anyChar
 
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
+
+-- | Match only if all input has been consumed.
+endOfInput :: Parser ()
+endOfInput = Parsec.eof
+
+-- | Return an indication of whether the end of input has been
+-- reached.
+atEnd :: Parser Bool
+atEnd = (endOfInput *> pure True) <|> pure False
