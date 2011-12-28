@@ -23,7 +23,7 @@ module Data.Attoparsec.Text.Parsec (
 -- * Parsing individual characters
 , char
 , anyChar
--- , I.notChar
+, notChar
 , satisfy
 -- , I.satisfyWith
 -- , I.skip
@@ -90,16 +90,28 @@ parseOnly p = either (Left . show) (Right) . Parsec.parse p ""
 try :: Parser a -> Parser a
 try = Parsec.try
 
+infix 0 <?>
 (<?>) :: Parser a -> String -> Parser a
 (<?>) = (Parsec.<?>)
 
+-- | Match a specific character.
 char :: Char -> Parser Char
 char = Parsec.char
 
-
+-- | Match any character.
 anyChar :: Parser Char
 anyChar = Parsec.anyChar
 
+-- | Match any character except the given one.
+notChar :: Char -> Parser Char
+notChar c = satisfy (/= c) <?> "not " ++ show c
+
+-- | The parser @satisfy p@ succeeds for any character for which the
+-- predicate @p@ returns 'True'. Returns the character that is
+-- actually parsed.
+--
+-- >digit = satisfy isDigit
+-- >    where isDigit c = c >= '0' && c <= '9'
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
 
