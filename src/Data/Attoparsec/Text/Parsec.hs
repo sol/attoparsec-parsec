@@ -29,9 +29,9 @@ module Data.Attoparsec.Text.Parsec (
 -- , I.skip
 
 -- ** Special character parsers
--- , digit
--- , letter
--- , space
+, digit
+, letter
+, space
 
 -- ** Character classes
 , Attoparsec.inClass
@@ -114,6 +114,18 @@ notChar c = satisfy (/= c) <?> "not " ++ show c
 -- >    where isDigit c = c >= '0' && c <= '9'
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
+
+-- | Parse a single digit, as recognised by 'isDigit'.
+digit :: Parser Char
+digit = Parsec.digit
+
+-- | Parse a letter, as recognised by 'isAlpha'.
+letter :: Parser Char
+letter = Parsec.letter
+
+-- | Parse a space character, as recognised by 'isSpace'.
+space :: Parser Char
+space = Parsec.space
 
 -- | @string s@ parses a sequence of characters that identically match
 -- @s@. Returns the parsed string (i.e. @s@).  This parser consumes no
