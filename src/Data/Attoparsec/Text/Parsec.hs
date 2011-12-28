@@ -49,8 +49,8 @@ module Data.Attoparsec.Text.Parsec (
 -- , I.takeTill
 
 -- ** Consume all remaining input
--- , I.takeText
--- , I.takeLazyText
+, takeText
+, takeLazyText
 
 -- * Text parsing
 , endOfLine
@@ -72,11 +72,11 @@ module Data.Attoparsec.Text.Parsec (
 ) where
 
 import           Prelude hiding (takeWhile)
-
 import           Data.Text   (Text)
 import qualified Data.Text as Text
-
+import qualified Data.Text.Lazy as L
 import           Control.Applicative
+
 import           Text.Parsec.Text (Parser)
 import qualified Text.Parsec as Parsec
 
@@ -114,6 +114,14 @@ anyChar = Parsec.anyChar
 
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
+
+-- | Consume all remaining input and return it as a single string.
+takeText :: Parser Text
+takeText = takeWhile (const True)
+
+-- | Consume all remaining input and return it as a single string.
+takeLazyText :: Parser L.Text
+takeLazyText = L.pack `fmap` many (satisfy $ const True)
 
 -- | Match either a single newline character @\'\\n\'@, or a carriage
 -- return followed by a newline character @\"\\r\\n\"@.

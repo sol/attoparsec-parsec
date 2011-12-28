@@ -21,3 +21,11 @@ spec = do
 
     it "does not consume any input" $ do
       parseOnly (atEnd *> takeWhile (const True) <* endOfInput) "foo" `shouldBe` Right "foo"
+
+  describe "takeText" $ do
+    it "consumes all remaining input" $ do
+      parseOnly takeText "foo" `shouldBe` Right "foo"
+
+  describe "takeLazyText" $ do
+    it "consumes all remaining input" $ do
+      parseOnly takeText "foo" `shouldBe` Right "foo"
