@@ -1,0 +1,22 @@
+name:             attoparsec-parsec
+version:          3.1.2.0
+synopsis:         An Attoparsec compatibility layer for Parsec
+license:          MIT
+license-file:     LICENSE
+copyright:        (c) 2011 Simon Hengel
+author:           Simon Hengel
+maintainer:       Simon Hengel <sol@typeful.net>
+build-type:       Simple
+category:         Parsing
+cabal-version:    >= 1.6
+
+library
+  ghc-options: -Wall
+  hs-source-dirs: src
+  build-depends:
+      base == 4.*
+    , parsec == 3.1.2
+    , text >= 0.2 && < 0.12
+    , attoparsec
+  exposed-modules:
+      Data.Attoparsec.Text.Parsec
