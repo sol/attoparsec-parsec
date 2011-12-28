@@ -4,7 +4,7 @@ module Spec (main, spec) where
 
 import           Test.Hspec.ShouldBe
 
-import           Prelude hiding (takeWhile)
+import           Prelude hiding (take, takeWhile)
 import           Control.Applicative
 import           Data.Attoparsec.Text.Parsec
 
@@ -29,3 +29,10 @@ spec = do
   describe "takeLazyText" $ do
     it "consumes all remaining input" $ do
       parseOnly takeText "foo" `shouldBe` Right "foo"
+
+  describe "take" $ do
+    it "consumes exactly a given number n characters of input" $ do
+      parseOnly (take 3) "foobar" `shouldBe` Right "foo"
+
+    it "consumes nothing, if n is negative" $ do
+      parseOnly ((,) <$> take (-3) <*> takeText) "foobar" `shouldBe` Right ("", "foobar")

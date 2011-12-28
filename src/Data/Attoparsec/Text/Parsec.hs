@@ -40,13 +40,13 @@ module Data.Attoparsec.Text.Parsec (
 -- * Efficient string handling
 , string
 -- , stringCI
--- , skipSpace
+, skipSpace
 , skipWhile
 -- , I.scan
--- , I.take
+, take
 , takeWhile
 , takeWhile1
--- , I.takeTill
+, takeTill
 
 -- ** Consume all remaining input
 , takeText
@@ -71,11 +71,12 @@ module Data.Attoparsec.Text.Parsec (
 , atEnd
 ) where
 
-import           Prelude hiding (takeWhile)
+import           Prelude hiding (take, takeWhile)
 import           Data.Text   (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as L
 import           Control.Applicative
+import           Control.Monad (replicateM)
 
 import           Text.Parsec.Text (Parser)
 import qualified Text.Parsec as Parsec
@@ -96,24 +97,74 @@ char :: Char -> Parser Char
 char = Parsec.char
 
 
-
-takeWhile :: (Char -> Bool) -> Parser Text
-takeWhile p = Text.pack <$> many (satisfy p)
-
-takeWhile1 :: (Char -> Bool) -> Parser Text
-takeWhile1 p = Text.pack <$> many1 (satisfy p)
-
-skipWhile :: (Char -> Bool) -> Parser ()
-skipWhile p = Parsec.skipMany (satisfy p)
-
-string :: String -> Parser Text
-string s = Text.pack <$> Parsec.string s
-
 anyChar :: Parser Char
 anyChar = Parsec.anyChar
 
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
+
+-- | @string s@ parses a sequence of characters that identically match
+-- @s@. Returns the parsed string (i.e. @s@).  This parser consumes no
+-- input if it fails (even if a partial match).
+--
+-- /Note/: The behaviour of this parser is different to that of the
+-- similarly-named parser in Parsec, as this one is all-or-nothing.
+-- To illustrate the difference, the following parser will fail under
+-- Parsec given an input of @"for"@:
+--
+-- >string "foo" <|> string "for"
+--
+-- The reason for its failure is that that the first branch is a
+-- partial match, and will consume the letters @\'f\'@ and @\'o\'@
+-- before failing.  In Attoparsec, the above parser will /succeed/ on
+-- that input, because the failed first branch will consume nothing.
+string :: String -> Parser Text
+string s = Text.pack <$> Parsec.string s
+
+-- | Skip over white space.
+skipSpace :: Parser ()
+skipSpace = Parsec.spaces
+
+-- | Skip past input for as long as the predicate returns 'True'.
+skipWhile :: (Char -> Bool) -> Parser ()
+skipWhile p = Parsec.skipMany (satisfy p)
+
+-- | Consume exactly @n@ characters of input.
+take :: Int -> Parser Text
+take n = Text.pack <$> replicateM n anyChar
+
+-- | Consume input as long as the predicate returns 'True', and return
+-- the consumed input.
+--
+-- This parser does not fail.  It will return an empty string if the
+-- predicate returns 'False' on the first character of input.
+--
+-- /Note/: Because this parser does not fail, do not use it with
+-- combinators such as 'many', because such parsers loop until a
+-- failure occurs.  Careless use will thus result in an infinite loop.
+takeWhile :: (Char -> Bool) -> Parser Text
+takeWhile p = Text.pack <$> many (satisfy p)
+
+-- | Consume input as long as the predicate returns 'True', and return
+-- the consumed input.
+--
+-- This parser requires the predicate to succeed on at least one
+-- character of input: it will fail if the predicate never returns
+-- 'True' or if there is no input left.
+takeWhile1 :: (Char -> Bool) -> Parser Text
+takeWhile1 p = Text.pack <$> many1 (satisfy p)
+
+-- | Consume input as long as the predicate returns 'False'
+-- (i.e. until it returns 'True'), and return the consumed input.
+--
+-- This parser does not fail.  It will return an empty string if the
+-- predicate returns 'True' on the first character of input.
+--
+-- /Note/: Because this parser does not fail, do not use it with
+-- combinators such as 'many', because such parsers loop until a
+-- failure occurs.  Careless use will thus result in an infinite loop.
+takeTill :: (Char -> Bool) -> Parser Text
+takeTill p = takeWhile (not . p)
 
 -- | Consume all remaining input and return it as a single string.
 takeText :: Parser Text
