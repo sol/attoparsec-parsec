@@ -11,7 +11,7 @@ Example:
     import qualified Data.Text.IO as Text
 
     #ifdef USE_ATTOPARSEC
-    import           Data.Attoparsec.Text hiding (parse)
+    import           Data.Attoparsec.Text
     #else
     import           Data.Attoparsec.Text.Parsec
     #endif
