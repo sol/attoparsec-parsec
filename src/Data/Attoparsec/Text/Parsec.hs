@@ -54,8 +54,8 @@ module Data.Attoparsec.Text.Parsec (
 
 -- * Text parsing
 , endOfLine
-, Attoparsec.isEndOfLine
-, Attoparsec.isHorizontalSpace
+, isEndOfLine
+, isHorizontalSpace
 
 -- * Numeric parsers
 -- , decimal
@@ -96,8 +96,6 @@ char :: Char -> Parser Char
 char = Parsec.char
 
 
-endOfLine :: Parser ()
-endOfLine = Parsec.option '\r' (char '\r') >> char '\n' >> return ()
 
 takeWhile :: (Char -> Bool) -> Parser Text
 takeWhile p = Text.pack <$> many (satisfy p)
@@ -116,6 +114,21 @@ anyChar = Parsec.anyChar
 
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
+
+-- | Match either a single newline character @\'\\n\'@, or a carriage
+-- return followed by a newline character @\"\\r\\n\"@.
+endOfLine :: Parser ()
+endOfLine = Parsec.option '\r' (char '\r') >> char '\n' >> return ()
+
+-- | A predicate that matches either a carriage return @\'\\r\'@ or
+-- newline @\'\\n\'@ character.
+isEndOfLine :: Char -> Bool
+isEndOfLine = Attoparsec.isEndOfLine
+
+-- | A predicate that matches either a space @\' \'@ or horizontal tab
+-- @\'\\t\'@ character.
+isHorizontalSpace :: Char -> Bool
+isHorizontalSpace = Attoparsec.isHorizontalSpace
 
 -- | Match only if all input has been consumed.
 endOfInput :: Parser ()
