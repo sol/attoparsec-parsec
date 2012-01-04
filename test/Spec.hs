@@ -36,3 +36,10 @@ spec = do
 
     it "consumes nothing, if n is negative" $ do
       parseOnly ((,) <$> take (-3) <*> takeText) "foobar" `shouldBe` Right ("", "foobar")
+
+  describe "stringCI" $ do
+    it "ignores case" $ do
+      parseOnly (stringCI "fooBAR") "FOObar" `shouldBe` Right "FOObar"
+
+    it "does proper case folding" $ (const . pending) "ignored" $ do
+      parseOnly (stringCI "dass") "da\223" `shouldBe` Right "da\223"

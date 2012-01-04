@@ -39,7 +39,7 @@ module Data.Attoparsec.Text.Parsec (
 
 -- * Efficient string handling
 , string
--- , stringCI
+, stringCI
 , skipSpace
 , skipWhile
 -- , I.scan
@@ -72,6 +72,7 @@ module Data.Attoparsec.Text.Parsec (
 ) where
 
 import           Prelude hiding (take, takeWhile)
+import           Data.Char (toLower, toUpper)
 import           Data.Text   (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as L
@@ -144,6 +145,21 @@ space = Parsec.space
 -- that input, because the failed first branch will consume nothing.
 string :: String -> Parser Text
 string s = Text.pack <$> Parsec.string s
+
+-- | Satisfy a literal string, ignoring case.
+--
+-- NOTE: No proper case folding is done, yet.  Currently @stringCI s@ is just
+--
+-- > char (toLower c) <|> char (toUpper c)
+--
+-- for each character of @s@.  The implementation from @Data.Attoparsec.Text@
+-- tries to do proper case folding, but is actually buggy (see
+-- <https://github.com/bos/attoparsec/issues/6>).  As long as you deal with
+-- characters from the ASCII range, both implementations should be fine.
+stringCI :: Text -> Parser Text
+stringCI = fmap Text.pack . sequence . map f . Text.unpack
+  where
+    f c = char (toLower c) <|> char (toUpper c)
 
 -- | Skip over white space.
 skipSpace :: Parser ()

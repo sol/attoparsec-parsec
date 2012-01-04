@@ -3,7 +3,7 @@ version:          3.1.2.0
 synopsis:         An Attoparsec compatibility layer for Parsec
 license:          MIT
 license-file:     LICENSE
-copyright:        (c) 2011 Simon Hengel
+copyright:        (c) 2011, 2012 Simon Hengel
 author:           Simon Hengel
 maintainer:       Simon Hengel <sol@typeful.net>
 build-type:       Simple
