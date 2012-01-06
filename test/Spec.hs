@@ -3,9 +3,12 @@
 module Spec (main, spec) where
 
 import           Test.Hspec.ShouldBe
+import           Test.QuickCheck hiding (property)
 
 import           Prelude hiding (take, takeWhile)
 import           Control.Applicative
+import qualified Data.Text as Text
+
 import           Data.Attoparsec.Text.Parsec
 
 main = hspec spec
@@ -43,3 +46,10 @@ spec = do
 
     it "does proper case folding" $ (const . pending) "ignored" $ do
       parseOnly (stringCI "dass") "da\223" `shouldBe` Right "da\223"
+
+  describe "decimal" $ do
+    it "parses 23" $ do
+      parseOnly (decimal) "23" `shouldBe` Right (23 :: Int)
+
+    it "parses any postive decimal number" $ property $
+      \(Positive n) -> parseOnly (decimal) (Text.pack $ show n) == Right (n :: Int)

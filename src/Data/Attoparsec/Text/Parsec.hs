@@ -58,7 +58,7 @@ module Data.Attoparsec.Text.Parsec (
 , isHorizontalSpace
 
 -- * Numeric parsers
--- , decimal
+, decimal
 -- , hexadecimal
 -- , signed
 -- , double
@@ -72,7 +72,7 @@ module Data.Attoparsec.Text.Parsec (
 ) where
 
 import           Prelude hiding (take, takeWhile)
-import           Data.Char (toLower, toUpper)
+import           Data.Char (toLower, toUpper, ord)
 import           Data.Text   (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as L
@@ -228,6 +228,14 @@ isEndOfLine = Attoparsec.isEndOfLine
 -- @\'\\t\'@ character.
 isHorizontalSpace :: Char -> Bool
 isHorizontalSpace = Attoparsec.isHorizontalSpace
+
+-- | Parse and decode an unsigned decimal number.
+decimal :: Integral a => Parser a
+decimal = Text.foldl' step 0 `fmap` takeWhile1 isDecimal
+  where step a c = a * 10 + fromIntegral (ord c - 48)
+
+isDecimal :: Char -> Bool
+isDecimal c = c >= '0' && c <= '9'
 
 -- | Match only if all input has been consumed.
 endOfInput :: Parser ()
