@@ -17,7 +17,7 @@ description:      This package provides an implementation of
                   Attoparsec is an awesome and very fast library, but it still
                   has a weak point: It does not generate very useful error
                   messages on parse errors.  Compiling an Attoparsec parser
-                  against Parsec can be useful in at least two situations.
+                  against Parsec can be useful for at least two scenarios.
                   .
                   - Parsec can be used while developing Attoparsec parsers, so
                     that you get better error messages on failing test cases.
