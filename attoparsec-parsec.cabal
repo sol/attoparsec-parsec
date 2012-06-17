@@ -28,7 +28,7 @@ description:      This package provides an implementation of
                     message to the user.
                   .
                   A simple usage example is here:
-                  https://github.com/sol/attoparsec-parsec#readme
+                  <https://github.com/sol/attoparsec-parsec#readme>
 
 source-repository head
   type: git

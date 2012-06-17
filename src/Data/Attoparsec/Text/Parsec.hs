@@ -15,7 +15,7 @@
 --   of `try` it is possible to write parsers that behave consistent across
 --   Attoparsec and Parsec.  Read the next section for more on that.
 --
--- A simple usage example is here: https://github.com/sol/attoparsec-parsec#readme
+-- A simple usage example is here: <https://github.com/sol/attoparsec-parsec#readme>
 module Data.Attoparsec.Text.Parsec (
 
 -- * Writing parsers that behave consistent across Attoparsec and Parsec
