@@ -36,21 +36,11 @@ module Data.Attoparsec.Text.Parsec (
 
 
 
--- * Parser types
+-- * Parser type
   Parser
--- , Result
--- , T.IResult(..)
 
 -- * Running parsers
--- , parse
--- , feed
 , parseOnly
--- , parseWith
--- , parseTest
-
--- Result conversion
--- , maybeResult
--- , eitherResult
 
 -- * Combinators
 , (<?>)
@@ -62,8 +52,8 @@ module Data.Attoparsec.Text.Parsec (
 , anyChar
 , notChar
 , satisfy
--- , I.satisfyWith
--- , I.skip
+-- , satisfyWith
+-- , skip
 
 -- ** Special character parsers
 , digit
@@ -79,7 +69,7 @@ module Data.Attoparsec.Text.Parsec (
 , stringCI
 , skipSpace
 , skipWhile
--- , I.scan
+-- , scan
 , take
 , takeWhile
 , takeWhile1
