@@ -1,4 +1,41 @@
 module Data.Attoparsec.Text.Parsec (
+
+-- * Writing parsers that behave consistent across Attoparsec and Parsec
+-- |
+--
+-- This module implements "Data.Attoparsec.Text" in terms of Parsec.  This
+-- allows you to write parsers that can be compiled against both Attoparsec and
+-- Parsec.
+--
+-- Note: Some care is needed, so that parsers behave consistent across
+-- Attoparsec and Parsec in regards to backtracking.  Attoparsec parsers always
+-- backtrack on failure.  In contrast, a Parsec parser that fail after it has
+-- consumed input will not automatically backtrack, but it can be turned into
+-- backtracking parsers with `try`.
+--
+-- Here is an example that illustrates the difference.  The following parser
+-- will fail under Parsec given an input of @\"for\"@:
+--
+-- >string "foo" <|> string "for"
+--
+-- The reason for its failure is that the first branch is a partial match, and
+-- will consume the letters @\'f\'@ and @\'o\'@ before failing.  In Attoparsec,
+-- the above parser will succeed on that input, because the failed first
+-- branch will consume nothing.
+--
+-- The `try` function can be used to write parsers that behave consistent
+-- across Attoparsec and Parsec.  Each alternative that may fail after
+-- consuming input, has to be prefixed with @try@.  E.g. for the parser above
+-- we would write:
+--
+-- >try (string "foo") <|> string "for"
+--
+-- For Parsec `try` enables backtracking, for Attoparsec it's just a
+-- type-constrained version of `id` (see Attoparsec's `Attoparsec.try`).
+
+
+
+
 -- * Parser types
   Parser
 -- , Result
@@ -11,7 +48,7 @@ module Data.Attoparsec.Text.Parsec (
 -- , parseWith
 -- , parseTest
 
--- ** Result conversion
+-- Result conversion
 -- , maybeResult
 -- , eitherResult
 
@@ -139,20 +176,7 @@ space :: Parser Char
 space = Parsec.space
 
 -- | @string s@ parses a sequence of characters that identically match
--- @s@. Returns the parsed string (i.e. @s@).  This parser consumes no
--- input if it fails (even if a partial match).
---
--- /Note/: The behaviour of this parser is different to that of the
--- similarly-named parser in Parsec, as this one is all-or-nothing.
--- To illustrate the difference, the following parser will fail under
--- Parsec given an input of @"for"@:
---
--- >string "foo" <|> string "for"
---
--- The reason for its failure is that that the first branch is a
--- partial match, and will consume the letters @\'f\'@ and @\'o\'@
--- before failing.  In Attoparsec, the above parser will /succeed/ on
--- that input, because the failed first branch will consume nothing.
+-- @s@. Returns the parsed string (i.e. @s@).
 string :: Text -> Parser Text
 string = fmap Text.pack . Parsec.string . Text.unpack
 
