@@ -27,6 +27,10 @@ description:      This package provides an implementation of
                     input with Parsec, so that you can display a useful error
                     message to the user.
 
+source-repository head
+  type: git
+  location: https://github.com/sol/attoparsec-parsec
+
 library
   ghc-options:
       -Wall
