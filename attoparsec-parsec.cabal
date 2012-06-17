@@ -33,4 +33,4 @@ test-suite spec
   main-is:
       Spec.hs
   build-depends:
-      base, attoparsec-parsec, text, hspec-shouldbe, QuickCheck
+      base, attoparsec-parsec, text, hspec-shouldbe, hspec-discover, QuickCheck
