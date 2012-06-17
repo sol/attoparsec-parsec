@@ -1,6 +1,6 @@
 -- |
--- This module implements "Data.Attoparsec.Text" in terms of Parsec.  This
--- allows you to write parsers that can be compiled against both Attoparsec and
+-- This module implements "Data.Attoparsec.Text" in terms of Parsec.  It can be
+-- used to write parsers that can be compiled against both Attoparsec and
 -- Parsec.
 --
 -- Differences from "Data.Attoparsec.Text":
