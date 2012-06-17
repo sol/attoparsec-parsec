@@ -20,7 +20,7 @@ module Data.Attoparsec.Text.Parsec (
 -- |
 -- Some care is needed, so that parsers behave consistent across
 -- Attoparsec and Parsec in regards to backtracking.  Attoparsec parsers always
--- backtrack on failure.  In contrast, a Parsec parser that fail after it has
+-- backtrack on failure.  In contrast, a Parsec parser that fails after it has
 -- consumed input will not automatically backtrack, but it can be turned into
 -- backtracking parsers with `try`.
 --
