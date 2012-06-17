@@ -1,9 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Spec (main, spec) where
+module Main (main, spec) where
 
 import           Test.Hspec.ShouldBe
-import           Test.QuickCheck hiding (property)
+import           Test.QuickCheck
 
 import           Prelude hiding (take, takeWhile)
 import           Control.Applicative
@@ -11,8 +10,10 @@ import qualified Data.Text as Text
 
 import           Data.Attoparsec.Text.Parsec
 
-main = hspec spec
+main :: IO ()
+main = hspecX spec
 
+spec :: Spec
 spec = do
 
   describe "atEnd" $ do
