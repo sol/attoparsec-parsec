@@ -1,13 +1,24 @@
-module Data.Attoparsec.Text.Parsec (
-
--- * Writing parsers that behave consistent across Attoparsec and Parsec
 -- |
---
 -- This module implements "Data.Attoparsec.Text" in terms of Parsec.  This
 -- allows you to write parsers that can be compiled against both Attoparsec and
 -- Parsec.
 --
--- Note: Some care is needed, so that parsers behave consistent across
+-- Differences from "Data.Attoparsec.Text":
+--
+-- * Incremental input is not supported.
+--
+-- * `A.satisfyWith`, `A.skip`, `A.scan`, and most of the numeric parsers are
+-- not yet implemented.  Patches are gladly welcome!
+--
+-- * Parsec parsers (and hence the parsers provided here) do not automatically
+--   backtrack on failing alternatives that consumed input.  With careful use
+--   of `try` it is possible to write parsers that behave consistent across
+--   Attoparsec and Parsec.  Read the next section for more on that.
+module Data.Attoparsec.Text.Parsec (
+
+-- * Writing parsers that behave consistent across Attoparsec and Parsec
+-- |
+-- Some care is needed, so that parsers behave consistent across
 -- Attoparsec and Parsec in regards to backtracking.  Attoparsec parsers always
 -- backtrack on failure.  In contrast, a Parsec parser that fail after it has
 -- consumed input will not automatically backtrack, but it can be turned into
@@ -31,7 +42,7 @@ module Data.Attoparsec.Text.Parsec (
 -- >try (string "foo") <|> string "for"
 --
 -- For Parsec `try` enables backtracking, for Attoparsec it's just a
--- type-constrained version of `id` (see Attoparsec's `Attoparsec.try`).
+-- type-constrained version of `id` (see Attoparsec's `A.try`).
 
 
 
@@ -61,8 +72,8 @@ module Data.Attoparsec.Text.Parsec (
 , space
 
 -- ** Character classes
-, Attoparsec.inClass
-, Attoparsec.notInClass
+, A.inClass
+, A.notInClass
 
 -- * Efficient string handling
 , string
@@ -81,8 +92,8 @@ module Data.Attoparsec.Text.Parsec (
 
 -- * Text parsing
 , endOfLine
-, Attoparsec.isEndOfLine
-, Attoparsec.isHorizontalSpace
+, A.isEndOfLine
+, A.isHorizontalSpace
 
 -- * Numeric parsers
 , decimal
@@ -109,7 +120,7 @@ import           Control.Monad (replicateM)
 import           Text.Parsec.Text (Parser)
 import qualified Text.Parsec as Parsec
 
-import qualified Data.Attoparsec.Text as Attoparsec
+import qualified Data.Attoparsec.Text as A
 import           Data.Attoparsec.Combinator
 
 parseOnly :: Parser a -> Text -> Either String a
@@ -172,11 +183,11 @@ string = fmap Text.pack . Parsec.string . Text.unpack
 
 -- | Satisfy a literal string, ignoring case.
 --
--- NOTE: No proper case folding is done, yet.  Currently @stringCI s@ is just
+-- /Note/: No proper case folding is done, yet.  Currently @stringCI s@ is just
 --
 -- > char (toLower c) <|> char (toUpper c)
 --
--- for each character of @s@.  The implementation from @Data.Attoparsec.Text@
+-- for each character of @s@.  The implementation from "Data.Attoparsec.Text"
 -- tries to do proper case folding, but is actually buggy (see
 -- <https://github.com/bos/attoparsec/issues/6>).  As long as you deal with
 -- characters from the ASCII range, both implementations should be fine.
