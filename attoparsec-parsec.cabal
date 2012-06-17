@@ -34,3 +34,25 @@ test-suite spec
       Spec.hs
   build-depends:
       base, attoparsec-parsec, text, hspec-shouldbe, hspec-discover, QuickCheck
+
+test-suite readme-parsec
+  type:
+      exitcode-stdio-1.0
+  ghc-options:
+      -Wall -Werror -pgmL pandoc-unlit
+  main-is:
+      README.lhs
+  build-depends:
+      base, attoparsec-parsec, text
+
+test-suite readme-attoparsec
+  type:
+      exitcode-stdio-1.0
+  ghc-options:
+      -Wall -Werror -pgmL pandoc-unlit
+  cpp-options:
+      -DUSE_ATTOPARSEC
+  main-is:
+      README.lhs
+  build-depends:
+      base, attoparsec, text

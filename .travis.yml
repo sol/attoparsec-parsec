@@ -3,4 +3,5 @@ language: haskell
 install:
     - cabal update
     - cabal install hspec-shouldbe hspec-discover
+    - git clone https://github.com/sol/pandoc-unlit && cd pandoc-unlit && cabal install && cd ..
     - cabal install
