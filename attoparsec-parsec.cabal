@@ -36,7 +36,7 @@ library
       base == 4.*
     , parsec >= 3.1.2
     , text
-    , attoparsec
+    , attoparsec >= 0.10.0.0
   exposed-modules:
       Data.Attoparsec.Text.Parsec
 
