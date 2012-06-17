@@ -54,3 +54,9 @@ spec = do
 
     it "parses any postive decimal number" $ property $
       \(Positive n) -> parseOnly (decimal) (Text.pack $ show n) == Right (n :: Int)
+
+  describe "Efficient string handling" $ do
+
+    describe "string" $ do
+      it "parses a given string" $ do
+        parseOnly (string "foobar") "foobar" `shouldBe` Right "foobar"

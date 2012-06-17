@@ -153,8 +153,8 @@ space = Parsec.space
 -- partial match, and will consume the letters @\'f\'@ and @\'o\'@
 -- before failing.  In Attoparsec, the above parser will /succeed/ on
 -- that input, because the failed first branch will consume nothing.
-string :: String -> Parser Text
-string s = Text.pack <$> Parsec.string s
+string :: Text -> Parser Text
+string = fmap Text.pack . Parsec.string . Text.unpack
 
 -- | Satisfy a literal string, ignoring case.
 --
