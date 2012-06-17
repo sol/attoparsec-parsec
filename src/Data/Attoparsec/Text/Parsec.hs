@@ -72,7 +72,7 @@ module Data.Attoparsec.Text.Parsec (
 ) where
 
 import           Prelude hiding (take, takeWhile)
-import           Data.Char (toLower, toUpper, ord)
+import           Data.Char
 import           Data.Text   (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as L
@@ -88,12 +88,22 @@ import           Data.Attoparsec.Combinator
 parseOnly :: Parser a -> Text -> Either String a
 parseOnly p = either (Left . show) (Right) . Parsec.parse p ""
 
+-- |
+-- Name the parser, in case failure occurs.
+--
+-- See Parsec's documentation of `Parsec.<?>` for detailed semantics.
+(<?>) :: Parser a
+      -> String     -- ^ the name to use if parsing fails
+      -> Parser a
+(<?>) = (Parsec.<?>)
+infix 0 <?>
+
+-- |
+-- Attempt a parse, and if it fails, rewind the input so that no input appears to have been consumed.
+--
+-- See Parsec's documentation of `Parsec.try` for detailed semantics.
 try :: Parser a -> Parser a
 try = Parsec.try
-
-infix 0 <?>
-(<?>) :: Parser a -> String -> Parser a
-(<?>) = (Parsec.<?>)
 
 -- | Match a specific character.
 char :: Char -> Parser Char
