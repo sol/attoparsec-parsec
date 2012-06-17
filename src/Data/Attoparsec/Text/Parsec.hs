@@ -54,8 +54,8 @@ module Data.Attoparsec.Text.Parsec (
 
 -- * Text parsing
 , endOfLine
-, isEndOfLine
-, isHorizontalSpace
+, Attoparsec.isEndOfLine
+, Attoparsec.isHorizontalSpace
 
 -- * Numeric parsers
 , decimal
@@ -228,16 +228,6 @@ takeLazyText = L.pack `fmap` many (satisfy $ const True)
 -- return followed by a newline character @\"\\r\\n\"@.
 endOfLine :: Parser ()
 endOfLine = Parsec.option '\r' (char '\r') >> char '\n' >> return ()
-
--- | A predicate that matches either a carriage return @\'\\r\'@ or
--- newline @\'\\n\'@ character.
-isEndOfLine :: Char -> Bool
-isEndOfLine = Attoparsec.isEndOfLine
-
--- | A predicate that matches either a space @\' \'@ or horizontal tab
--- @\'\\t\'@ character.
-isHorizontalSpace :: Char -> Bool
-isHorizontalSpace = Attoparsec.isHorizontalSpace
 
 -- | Parse and decode an unsigned decimal number.
 decimal :: Integral a => Parser a
