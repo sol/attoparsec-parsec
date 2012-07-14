@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Data.Attoparsec.Text.ParsecSpec (main, spec) where
 
-import           Test.Hspec.ShouldBe
+import           Test.Hspec
 import           Test.QuickCheck
 
 import           Prelude hiding (take, takeWhile)
@@ -11,7 +11,7 @@ import qualified Data.Text as Text
 import           Data.Attoparsec.Text.Parsec
 
 main :: IO ()
-main = hspecX spec
+main = hspec spec
 
 spec :: Spec
 spec = do

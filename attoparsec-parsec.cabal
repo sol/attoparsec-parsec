@@ -57,7 +57,11 @@ test-suite spec
   main-is:
       Spec.hs
   build-depends:
-      base, attoparsec-parsec, text, hspec-shouldbe, hspec-discover, QuickCheck
+      base
+    , attoparsec-parsec
+    , text
+    , hspec >= 1.3
+    , QuickCheck
 
 test-suite readme-parsec
   type:
