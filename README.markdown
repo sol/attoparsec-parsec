@@ -6,7 +6,7 @@ both [Attoparsec](http://hackage.haskell.org/package/attoparsec) and
 
 Example:
 
-~~~ {.haskell .literate}
+~~~ {.haskell}
 {-# LANGUAGE CPP #-}
 import           Prelude hiding (takeWhile)
 import           Data.Text      (Text)

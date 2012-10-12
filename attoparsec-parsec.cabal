@@ -67,20 +67,20 @@ test-suite readme-parsec
   type:
       exitcode-stdio-1.0
   ghc-options:
-      -Wall -Werror -pgmL pandoc-unlit
+      -Wall -Werror -pgmL markdown-unlit
   main-is:
       README.lhs
   build-depends:
-      base, attoparsec-parsec, text
+      base, attoparsec-parsec, text, markdown-unlit
 
 test-suite readme-attoparsec
   type:
       exitcode-stdio-1.0
   ghc-options:
-      -Wall -Werror -pgmL pandoc-unlit
+      -Wall -Werror -pgmL markdown-unlit
   cpp-options:
       -DUSE_ATTOPARSEC
   main-is:
       README.lhs
   build-depends:
-      base, attoparsec, text
+      base, attoparsec, text, markdown-unlit
