@@ -16,6 +16,13 @@ main = hspec spec
 spec :: Spec
 spec = do
 
+  describe "IsString instance for Parser" $ do
+    it "recognizes a given string" $ do
+      parseOnly "foo" "foo" `shouldBe` Right "foo"
+
+    it "works without explicit type signature" $ do
+      parseOnly ("foo" >> "bar") "foobar" `shouldBe` Right "bar"
+
   describe "atEnd" $ do
     it "parses an empty string to True" $ do
       parseOnly atEnd "" `shouldBe` Right True

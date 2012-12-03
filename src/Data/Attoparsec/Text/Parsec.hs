@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeFamilies, FlexibleInstances #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 -- |
 -- This module implements "Data.Attoparsec.Text" in terms of Parsec.  It can be
 -- used to write parsers that can be compiled against both Attoparsec and
@@ -113,6 +115,7 @@ module Data.Attoparsec.Text.Parsec (
 
 import           Prelude hiding (take, takeWhile)
 import           Data.Char
+import           Data.String (IsString (..))
 import           Data.Text   (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as L
@@ -127,6 +130,9 @@ import           Data.Attoparsec.Combinator
 
 parseOnly :: Parser a -> Text -> Either String a
 parseOnly p = either (Left . show) (Right) . Parsec.parse p ""
+
+instance (a ~ Text) => IsString (Parser a) where
+  fromString = fmap Text.pack . Parsec.string
 
 -- |
 -- Name the parser, in case failure occurs.
