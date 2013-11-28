@@ -52,7 +52,7 @@ spec = do
     it "ignores case" $ do
       parseOnly (stringCI "fooBAR") "FOObar" `shouldBe` Right "FOObar"
 
-    it "does proper case folding" $ (const . pending) "ignored" $ do
+    it "does proper case folding" $ (const . pendingWith) "ignored" $ do
       parseOnly (stringCI "dass") "da\223" `shouldBe` Right "da\223"
 
   describe "decimal" $ do
