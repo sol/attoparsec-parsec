@@ -59,12 +59,12 @@ spec = do
     it "parses 23" $ do
       parseOnly decimal "23" `shouldBe` Right (23 :: Int)
 
+    it "parses any postive decimal number" $ property $
+      \(Positive n) -> parseOnly decimal (Text.pack $ show n) == Right (n :: Int)
+
   describe "hexadecimal" $ do
     it "parses 0xAB" $ do
       parseOnly hexadecimal "aB" `shouldBe` Right (171 :: Int)
-
-    it "parses any postive decimal number" $ property $
-      \(Positive n) -> parseOnly decimal (Text.pack $ show n) == Right (n :: Int)
 
   describe "Efficient string handling" $ do
 
