@@ -101,7 +101,7 @@ module Data.Attoparsec.Text.Parsec (
 
 -- * Numeric parsers
 , decimal
--- , hexadecimal
+, hexadecimal
 -- , signed
 -- , double
 -- , Number(..)
@@ -264,11 +264,17 @@ endOfLine = Parsec.option '\r' (char '\r') >> char '\n' >> return ()
 
 -- | Parse and decode an unsigned decimal number.
 decimal :: Integral a => Parser a
-decimal = Text.foldl' step 0 `fmap` takeWhile1 isDecimal
+decimal = Text.foldl' step 0 `fmap` takeWhile1 isDigit
   where step a c = a * 10 + fromIntegral (ord c - 48)
 
-isDecimal :: Char -> Bool
-isDecimal c = c >= '0' && c <= '9'
+--
+-- | Parse and decode an unsigned hexadecimal number.
+hexadecimal :: Integral a => Parser a
+hexadecimal= Text.foldl' step 0 `fmap` takeWhile1 isHexDigit
+  where step a c = a * 16 + hexDigit c
+        hexDigit c
+          | isLetter c = fromIntegral . (+(-87)) . ord . toLower $ c
+          | otherwise  = fromIntegral (ord c - 48)
 
 -- | Match only if all input has been consumed.
 endOfInput :: Parser ()
