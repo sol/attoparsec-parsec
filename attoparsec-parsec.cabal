@@ -60,7 +60,7 @@ test-suite spec
       base
     , attoparsec-parsec
     , text
-    , hspec >= 1.3
+    , hspec >= 1.5
     , QuickCheck
 
 test-suite readme-parsec
