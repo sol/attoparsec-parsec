@@ -13,6 +13,7 @@ import           Data.Attoparsec.Text.Parsec
 main :: IO ()
 main = hspec spec
 
+{-# ANN spec ("HLint: ignore Redundant do"::String) #-}
 spec :: Spec
 spec = do
 
@@ -47,6 +48,16 @@ spec = do
 
     it "consumes nothing, if n is negative" $ do
       parseOnly ((,) <$> take (-3) <*> takeText) "foobar" `shouldBe` Right ("", "foobar")
+
+  describe "peekChar" $ do
+    it "returns the next found character" $ do
+      parseOnly peekChar "foobar" `shouldBe` Right (Just 'f')
+
+    it "does not consume the input" $ do
+      parseOnly (peekChar >> takeText) "foobar" `shouldBe` Right "foobar"
+
+    it "returns nothing for null input" $ do
+      parseOnly peekChar "" `shouldBe` Right Nothing
 
   describe "stringCI" $ do
     it "ignores case" $ do
