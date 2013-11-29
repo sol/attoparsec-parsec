@@ -69,6 +69,7 @@ module Data.Attoparsec.Text.Parsec (
 , satisfy
 -- , satisfyWith
 -- , skip
+, peekChar
 
 -- ** Special character parsers
 , digit
@@ -171,6 +172,9 @@ notChar c = satisfy (/= c) <?> "not " ++ show c
 -- >    where isDigit c = c >= '0' && c <= '9'
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy = Parsec.satisfy
+
+peekChar :: Parser (Maybe Char)
+peekChar = Just <$> try (Parsec.lookAhead anyChar) <|> return Nothing
 
 -- | Parse a single digit, as recognised by 'isDigit'.
 digit :: Parser Char
