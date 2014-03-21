@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies, FlexibleInstances #-}
+{-# LANGUAGE CPP, TypeFamilies, FlexibleInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 -- |
 -- This module implements "Data.Attoparsec.Text" in terms of Parsec.  It can be
@@ -128,6 +128,9 @@ import qualified Text.Parsec as Parsec
 
 import qualified Data.Attoparsec.Text as A
 import           Data.Attoparsec.Combinator
+#if MIN_VERSION_attoparsec(0,11,2)
+  hiding (try, endOfInput, atEnd, (<?>))
+#endif
 
 parseOnly :: Parser a -> Text -> Either String a
 parseOnly p = either (Left . show) (Right) . Parsec.parse p ""
