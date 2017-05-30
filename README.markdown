@@ -6,7 +6,7 @@ both [Attoparsec](http://hackage.haskell.org/package/attoparsec) and
 
 Example:
 
-~~~ {.haskell}
+```haskell
 {-# LANGUAGE CPP #-}
 import           Prelude hiding (takeWhile)
 import           Data.Text      (Text)
@@ -27,4 +27,4 @@ removeDashes = Text.concat `fmap` sepBy text dash
   where
     text = takeWhile  (/= '-')
     dash = takeWhile1 (== '-')
-~~~
+```
